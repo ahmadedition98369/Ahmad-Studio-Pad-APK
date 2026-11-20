@@ -18,13 +18,22 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+
       - name: Build APK with Gradle
         run: |
-          chmod +x gradlew || true
-          gradle build assembleDebug || bash -c "gradle init --type basic && gradle assembleDebug"
+          mkdir -p app/src/main/res
+          gradle assembleDebug --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Ahmad-Studio-Pad-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+
